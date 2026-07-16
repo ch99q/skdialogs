@@ -52,4 +52,8 @@ modrinth {
         required.project("skript")
     }
     changelog.set("https://github.com/ch99q/skdialogs/releases/tag/v$version")
+    // The project description mirrors the README, with relative links made absolute so they
+    // survive leaving GitHub.
+    syncBodyFrom.set(rootProject.file("README.md").readText()
+            .replace(Regex("]\\((?!https?://|#)"), "](https://github.com/ch99q/skdialogs/blob/main/"))
 }

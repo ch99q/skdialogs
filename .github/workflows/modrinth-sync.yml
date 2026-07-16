@@ -1,0 +1,24 @@
+# Manually syncs the Modrinth project description from the README, for description changes
+# between releases. Releases sync it automatically.
+name: modrinth-sync
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sync-description:
+    runs-on: ubuntu-latest
+    env:
+      MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: gradle
+
+      - name: Sync description
+        run: ./gradlew modrinthSyncBody --no-daemon

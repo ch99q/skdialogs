@@ -60,4 +60,4 @@ jobs:
 
       - name: Publish to Modrinth
         if: env.MODRINTH_TOKEN != ''
-        run: ./gradlew modrinth --no-daemon
+        run: ./gradlew modrinth modrinthSyncBody --no-daemon
