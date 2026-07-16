@@ -35,8 +35,6 @@ on dialog click "rules":
 ## Install
 
 1. Install [Skript](https://github.com/SkriptLang/Skript) 2.12 or newer on Paper 1.21.8 or newer.
-   The dialogs themselves arrived in Minecraft 1.21.6, but Paper's API for them was only completed
-   in 1.21.8.
 2. Drop `skdialogs-<version>.jar` from the
    [latest release](https://github.com/ch99q/skdialogs/releases) into `plugins/`.
 3. Restart the server.
