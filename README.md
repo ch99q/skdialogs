@@ -1,7 +1,7 @@
 # SkDialogs
 
 [![build](https://github.com/ch99q/skdialogs/actions/workflows/build.yml/badge.svg)](https://github.com/ch99q/skdialogs/actions/workflows/build.yml)
-[![paper-watch](https://github.com/ch99q/skdialogs/actions/workflows/paper-watch.yml/badge.svg)](https://github.com/ch99q/skdialogs/actions/workflows/paper-watch.yml)
+[![paper-api](https://github.com/ch99q/skdialogs/actions/workflows/paper-api.yml/badge.svg)](https://github.com/ch99q/skdialogs/actions/workflows/paper-api.yml)
 
 A [Skript](https://github.com/SkriptLang/Skript) addon for
 [Paper's dialog API](https://docs.papermc.io/paper/dev/dialogs/), the modal windows
@@ -331,7 +331,7 @@ The jar lands in `build/libs/`. The addon compiles against the exact Paper build
 `gradle.properties`; to follow a new Paper build, bump that property and fix whatever no longer
 compiles.
 
-CI builds every push and pull request, and a weekly `paper-watch` job compiles against the latest
+CI builds every push and pull request, and a weekly `paper-api` job compiles against the latest
 Paper build, so a breaking change to the experimental dialog API shows up as a failed run instead
 of a surprise on a server. Pushing a `vX.Y.Z` tag attaches the jar to a GitHub release.
 

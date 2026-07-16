@@ -1,6 +1,6 @@
 # Compiles against the newest paper-api once a week. Paper's dialog API is experimental, so when
 # a new Paper build breaks it, this run fails and GitHub notifies, before any server hits it.
-name: paper-watch
+name: paper-api
 
 on:
   schedule:

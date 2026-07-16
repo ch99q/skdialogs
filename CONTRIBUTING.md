@@ -26,7 +26,7 @@ the dialog API is in
 [`PaperDialogs.java`](src/main/java/com/ch99q/skdialogs/paper/PaperDialogs.java), so the fixes stay
 in one file.
 
-The scheduled `paper-watch` workflow compiles against the newest Paper build every week, so a break
+The scheduled `paper-api` workflow compiles against the newest Paper build every week, so a break
 usually shows up there first, as a failed run.
 
 ## Pull requests
