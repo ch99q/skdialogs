@@ -5,8 +5,9 @@
 
 A [Skript](https://github.com/SkriptLang/Skript) addon for
 [Paper's dialog API](https://docs.papermc.io/paper/dev/dialogs/), the modal windows
-[added to Minecraft in 1.21.6](https://minecraft.wiki/w/Dialog). Write a dialog in a `.sk` script,
-show it to a player, and read back what they typed and clicked. No Java, no data packs.
+[added to Minecraft in 1.21.6](https://minecraft.wiki/w/Dialog). It adds the syntax to build and
+show them from a script: forms with text fields, toggles, sliders, and dropdowns, buttons that run
+commands or open other dialogs, and a click event with everything the player entered.
 
 For example, rules every player must accept before playing:
 
