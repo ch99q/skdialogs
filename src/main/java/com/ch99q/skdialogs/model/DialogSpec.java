@@ -61,18 +61,14 @@ public final class DialogSpec {
         public final String key;
         public Component label;
 
-        // text
         public String textDefault;
         public Integer maxLength;
         public Boolean multiline;
-        // boolean
         public Boolean booleanDefault;
-        // slider
         public Float min;
         public Float max;
         public Float step;
         public Float sliderDefault;
-        // dropdown
         public final List<Option> options = new ArrayList<>();
 
         public Input(Kind kind, String key) {

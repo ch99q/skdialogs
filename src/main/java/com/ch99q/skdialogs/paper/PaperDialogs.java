@@ -139,8 +139,7 @@ public final class PaperDialogs {
         for (DialogSpec.Button b : spec.buttons) {
             buttons.add(buildButton(spec.id, b, false));
         }
-        // A single button (with no back button) is a notice; anything richer is a multi-action,
-        // which is the only button type that carries a column count and an exit action.
+        // Multi-action is the only dialog type that carries a column count and an exit action.
         if (buttons.isEmpty()) {
             return exit != null ? DialogType.notice(exit) : DialogType.notice();
         }
@@ -186,11 +185,7 @@ public final class PaperDialogs {
         };
     }
 
-    /**
-     * Routes a command button by whether it carries a {@code $(input)} macro: a template with one
-     * goes through {@code commandTemplate} (which substitutes inputs but requires a macro), and a
-     * plain command with none runs as a static run-command click.
-     */
+    /** {@code commandTemplate} substitutes {@code $(input)} macros but rejects a command without one. */
     private static DialogAction commandAction(String command) {
         if (command.contains("$(")) {
             return DialogAction.commandTemplate(command.startsWith("/") ? command.substring(1) : command);
@@ -204,7 +199,6 @@ public final class PaperDialogs {
         return DialogAction.customClick(Key.key(NAMESPACE, value), null);
     }
 
-    /** Shows a built dialog to a player. */
     public static void show(Player player, Dialog dialog) {
         player.showDialog(dialog);
     }

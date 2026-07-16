@@ -1,5 +1,5 @@
-# New features: action buttons, a command-template form, labelled dropdown options,
-# keep-open behaviour, and an exit button. Run /menu and /rename.
+# Action buttons, a command-template form, labelled dropdown options, and keep-open
+# behaviour. Run /menu, /rename, and /class.
 
 # A menu whose buttons act on their own, with no event handler at all.
 command /menu:

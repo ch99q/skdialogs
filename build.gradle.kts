@@ -17,15 +17,12 @@ repositories {
 }
 
 dependencies {
-    // Both are compile-only: the server provides Paper and Skript at runtime. The dialog API is
-    // referenced directly, so a breaking change to it fails this compile against the pinned Paper
-    // version rather than surfacing at runtime on a server.
+    // Compile-only: the server provides both at runtime.
     compileOnly("io.papermc.paper:paper-api:$paperVersion")
     compileOnly("com.github.SkriptLang:Skript:$skriptVersion")
 }
 
-// Paper 26.2 requires Java 25, so target it. No toolchain is pinned, so the build uses whatever
-// JDK 25+ runs it, in CI and on a contributor's machine alike.
+// The Java version the pinned Paper requires; no toolchain pin, so any newer JDK can run the build.
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
     options.release = 25
@@ -39,7 +36,6 @@ tasks.processResources {
     }
 }
 
-// Uploads the built jar as a Modrinth version; CI runs this task on tagged releases.
 modrinth {
     token.set(System.getenv("MODRINTH_TOKEN"))
     projectId.set("skdialogs")

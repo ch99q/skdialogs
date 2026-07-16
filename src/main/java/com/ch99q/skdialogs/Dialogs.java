@@ -12,8 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * {@code create dialog} section, and every finished dialog kept by id for later showing.
  *
  * <p>The section runs its body synchronously on the server thread, so a thread-local stack is
- * enough to hand the in-progress dialog to the effects inside it without threading an id through
- * every line. A stack rather than a single slot lets one dialog section nest inside another.
+ * enough to hand the in-progress dialog to the effects inside it, and lets sections nest.
  */
 public final class Dialogs {
     private Dialogs() {}
