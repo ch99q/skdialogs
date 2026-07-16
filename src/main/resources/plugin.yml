@@ -1,0 +1,8 @@
+name: SkDialogs
+version: '${version}'
+main: com.ch99q.skdialogs.SkDialogs
+api-version: '1.21'
+author: Christian Hansen
+description: Skript syntax for Paper's dialog windows.
+depend: [Skript]
+website: https://github.com/ch99q/skdialogs
