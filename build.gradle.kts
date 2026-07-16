@@ -44,7 +44,7 @@ modrinth {
     uploadFile.set(tasks.jar)
     // Binary-compatible back to 1.21.8, the first Paper with the full dialog API.
     gameVersions.addAll("1.21.8", "1.21.9", "1.21.10", "1.21.11", "26.1.1", "26.1.2", "26.2")
-    loaders.add("paper")
+    loaders.addAll("paper", "purpur")
     dependencies {
         required.project("skript")
     }
