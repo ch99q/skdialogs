@@ -1,0 +1,37 @@
+# Compiles against the newest paper-api once a week. Paper's dialog API is experimental, so when
+# a new Paper build breaks it, this run fails and GitHub notifies, before any server hits it.
+name: paper-watch
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+jobs:
+  compile-against-latest-paper:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: gradle
+
+      - name: Find the latest paper-api version
+        id: paper
+        run: |
+          meta=$(curl -fsSL https://repo.papermc.io/repository/maven-public/io/papermc/paper/paper-api/maven-metadata.xml)
+          latest=$(printf '%s' "$meta" | sed -n 's:.*<latest>\(.*\)</latest>.*:\1:p')
+          if [ -z "$latest" ]; then
+            latest=$(printf '%s' "$meta" | sed -n 's:.*<version>\(.*\)</version>.*:\1:p' | tail -1)
+          fi
+          test -n "$latest"
+          pinned=$(sed -n 's/^paperVersion=//p' gradle.properties)
+          echo "version=$latest" >> "$GITHUB_OUTPUT"
+          echo "Pinned paper-api is \`$pinned\`, latest is \`$latest\`." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Compile against it
+        run: ./gradlew build --no-daemon --stacktrace -PpaperVersion=${{ steps.paper.outputs.version }}
