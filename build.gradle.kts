@@ -46,17 +46,14 @@ modrinth {
     versionNumber.set(version as String)
     versionType.set("release")
     uploadFile.set(tasks.jar)
-    // The jar compiles against the pinned Paper but stays binary-compatible back to 1.21.8, the
-    // first Paper with the full dialog API (verified by compiling against every version, and by
-    // running the release jar on 1.21.8 and the pin). Extend this list as new versions verify.
+    // Binary-compatible back to 1.21.8, the first Paper with the full dialog API.
     gameVersions.addAll("1.21.8", "1.21.9", "1.21.10", "1.21.11", "26.1.1", "26.1.2", "26.2")
     loaders.add("paper")
     dependencies {
         required.project("skript")
     }
     changelog.set("https://github.com/ch99q/skdialogs/releases/tag/v$version")
-    // The project description mirrors the README, with relative links made absolute so they
-    // survive leaving GitHub.
+    // The README, with relative links made absolute so they work off GitHub.
     syncBodyFrom.set(rootProject.file("README.md").readText()
             .replace(Regex("]\\((?!https?://|#)"), "](https://github.com/ch99q/skdialogs/blob/main/"))
 }
