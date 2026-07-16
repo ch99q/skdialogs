@@ -1,0 +1,29 @@
+# Every input type in one dialog, stored per player. Run /settings.
+
+command /settings:
+    trigger:
+        create dialog "settings":
+            set title to "&bYour settings"
+            set columns to 2
+            set close on escape to true
+            add body "Tune your preferences, then save."
+            add text input "name" labeled "Display name" with default "%player%" with max length 24
+            add toggle input "flight" labeled "Allow flight" with default false
+            add slider input "volume" labeled "Music volume" from 0 to 100 with step 5 with default 50
+            add dropdown input "theme" labeled "Chat theme" with options "light", "dark" and "auto" with default "auto"
+            add button "save" labeled "&2Save"
+            add button "cancel" labeled "&cCancel"
+        show dialog "settings" to player
+
+on dialog click "settings":
+    if the clicked button is "cancel":
+        send "&7Settings unchanged." to event-player
+        stop
+    set {settings::%event-player's uuid%::name} to dialog input "name"
+    set {settings::%event-player's uuid%::volume} to dialog input "volume"
+    set {settings::%event-player's uuid%::theme} to dialog input "theme"
+    set {_flight} to dialog input "flight"
+    set flight state of event-player to {_flight}
+    set {_volume} to dialog input "volume"
+    set {_theme} to dialog input "theme"
+    send "&aSaved. Volume is %{_volume}%, theme is %{_theme}%." to event-player

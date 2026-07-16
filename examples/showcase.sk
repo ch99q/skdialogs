@@ -1,0 +1,36 @@
+# Debugging showcase: one dialog exercising every component this addon exposes.
+# Run /showcase, fiddle with everything, press a button, and the values print to chat.
+
+command /showcase:
+    trigger:
+        create dialog "showcase":
+            set title to "&6Component showcase"
+            set columns to 2
+            set close on escape to true
+            add body "&7Every input and body type this addon supports."
+            add body "Second plain-message line."
+            add item body diamond sword
+            add text input "text" labeled "Text" with default "hello" with max length 32
+            add text input "multi" labeled "Multiline" with default "line 1" multiline
+            add toggle input "toggle" labeled "Toggle" with default true
+            add slider input "slider" labeled "Slider (0-100, step 5)" from 0 to 100 with step 5 with default 25
+            add dropdown input "dropdown" labeled "Dropdown" with options "red", "green" and "blue" with default "green"
+            add button "a" labeled "&aButton A" with tooltip "the first button"
+            add button "b" labeled "&bButton B" with tooltip "the second button"
+            add button "c" labeled "Button C"
+        show dialog "showcase" to player
+
+on dialog click "showcase":
+    set {_button} to the clicked button
+    set {_text} to dialog input "text"
+    set {_multi} to dialog input "multi"
+    set {_toggle} to dialog input "toggle"
+    set {_slider} to dialog input "slider"
+    set {_dropdown} to dialog input "dropdown"
+    send "&8&m----&r &6showcase" to event-player
+    send "&7clicked button: &f%{_button}%" to event-player
+    send "&7text: &f%{_text}%" to event-player
+    send "&7multiline: &f%{_multi}%" to event-player
+    send "&7toggle: &f%{_toggle}%" to event-player
+    send "&7slider: &f%{_slider}%" to event-player
+    send "&7dropdown: &f%{_dropdown}%" to event-player

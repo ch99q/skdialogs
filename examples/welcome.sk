@@ -1,0 +1,25 @@
+# A starter-kit picker. Run /welcome in game.
+
+command /welcome:
+    trigger:
+        create dialog "welcome":
+            set title to "&aWelcome to the server!"
+            add body "Pick a starter kit and set your nickname."
+            add text input "nickname" labeled "Nickname" with default "Player" with max length 16
+            add toggle input "pvp" labeled "Enable PvP?" with default false
+            add dropdown input "kit" labeled "Starter kit" with options "warrior", "mage" and "archer" with default "warrior"
+            add button "confirm" labeled "&2Confirm" with tooltip "Lock in your choices"
+        show dialog "welcome" to player
+
+on dialog click "welcome":
+    if the clicked button is "confirm":
+        set {_kit} to dialog input "kit"
+        set {_name} to dialog input "nickname"
+        set {_pvp} to dialog input "pvp"
+        send "&aKit: &f%{_kit}%&a, nickname: &f%{_name}%&a, PvP: &f%{_pvp}%" to event-player
+        if {_kit} is "warrior":
+            give iron sword to event-player
+        else if {_kit} is "mage":
+            give stick to event-player
+        else:
+            give bow to event-player

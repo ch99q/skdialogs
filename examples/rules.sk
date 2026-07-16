@@ -1,0 +1,21 @@
+# Rules every player must accept before playing. Shown on each join until accepted.
+
+on join:
+    if {rules accepted::%player's uuid%} is true:
+        stop
+    create dialog "rules":
+        set title to "&6Server rules"
+        set close on escape to false
+        add body "&71. Be kind."
+        add body "&72. No griefing."
+        add body "&73. Have fun."
+        add button "accept" labeled "&2I accept the rules"
+        add button "decline" labeled "&cDecline"
+    show dialog "rules" to player
+
+on dialog click "rules":
+    if the clicked button is "accept":
+        set {rules accepted::%event-player's uuid%} to true
+        send "&aThanks for accepting. Have fun!" to event-player
+    else:
+        kick event-player due to "&cYou must accept the rules to play."

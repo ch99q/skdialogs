@@ -1,0 +1,34 @@
+# A multi-page dialog: each page is its own dialog, and clicking a button opens the next.
+# Run /wizard. This is how you build wizards and paged menus with dialogs.
+
+command /wizard:
+    trigger:
+        create dialog "wizard-1":
+            set title to "&dCharacter setup (1/3)"
+            add body "Step 1: choose a name."
+            add text input "name" labeled "Character name" with default "Hero" with max length 16
+            add button "next" labeled "&aNext →"
+        show dialog "wizard-1" to player
+
+on dialog click "wizard-1":
+    set {wizard::%event-player's uuid%::name} to dialog input "name"
+    create dialog "wizard-2":
+        set title to "&dCharacter setup (2/3)"
+        add body "Step 2: choose a class."
+        add dropdown input "class" labeled "Class" with options "knight", "ranger" and "wizard" with default "knight"
+        add button "next" labeled "&aNext →"
+    show dialog "wizard-2" to event-player
+
+on dialog click "wizard-2":
+    set {wizard::%event-player's uuid%::class} to dialog input "class"
+    set {_name} to {wizard::%event-player's uuid%::name}
+    set {_class} to {wizard::%event-player's uuid%::class}
+    create dialog "wizard-3":
+        set title to "&dCharacter setup (3/3)"
+        add body "You are &f%{_name}%&7, a &f%{_class}%&7."
+        add body "Ready to begin?"
+        add button "finish" labeled "&2Start playing"
+    show dialog "wizard-3" to event-player
+
+on dialog click "wizard-3":
+    send "&aWelcome, %{wizard::%event-player's uuid%::name}%!" to event-player

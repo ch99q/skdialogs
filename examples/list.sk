@@ -1,0 +1,27 @@
+# A dialog list: a menu whose entries open other dialogs. Run /hub.
+# Each page has a Back button that navigates to the hub with `that shows`, so the menu loops.
+
+command /hub:
+    trigger:
+        create dialog "hub-rules":
+            set title to "&eRules"
+            add body "1. Be kind.  2. No griefing.  3. Have fun."
+            add button "back" labeled "← Back" that shows "hub"
+        create dialog "hub-kit":
+            set title to "&aStarter kit"
+            add body "Pick your kit."
+            add button "warrior" labeled "Warrior"
+            add button "mage" labeled "Mage"
+            add button "back" labeled "← Back" that shows "hub"
+        create dialog "hub":
+            set title to "&6Server hub"
+            set columns to 1
+            add body "Choose an option:"
+            add dialog "hub-rules" to the list
+            add dialog "hub-kit" to the list
+            add exit button "close" labeled "Close"
+        show dialog "hub" to player
+
+on dialog click "hub-kit":
+    if the clicked button is "warrior" or "mage":
+        send "&aYou chose the %the clicked button% kit!" to event-player

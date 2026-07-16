@@ -1,0 +1,44 @@
+# New features: action buttons, a command-template form, labelled dropdown options,
+# keep-open behaviour, and an exit button. Run /menu and /rename.
+
+# A menu whose buttons act on their own, with no event handler at all.
+command /menu:
+    trigger:
+        create dialog "menu":
+            set title to "&6Server menu"
+            set columns to 1
+            add body "Where to?"
+            add button labeled "&aSpawn" that runs "/spawn"
+            add button labeled "&bWiki" that opens "https://docs.papermc.io"
+            add button labeled "Copy server IP" that copies "play.example.com"
+            add exit button "close" labeled "Close"
+        show dialog "menu" to player
+
+# A form that submits straight to a command: $(name) is filled from the input at click time.
+command /rename:
+    trigger:
+        create dialog "rename":
+            set title to "&dRename yourself"
+            add text input "name" labeled "New name" with default "%player%" with max length 16
+            add button labeled "&2Apply" that runs "/nick $(name)"
+            add exit button "cancel" labeled "Cancel"
+        show dialog "rename" to player
+
+# Labelled dropdown options: the shown text differs from the id we read back.
+command /class:
+    trigger:
+        create dialog "class":
+            set title to "&9Choose a class"
+            set after click to keep open
+            add dropdown input "class" labeled "Class":
+                option "knight" labeled "&fThe Knight" as default
+                option "ranger" labeled "&aThe Ranger"
+                option "wizard" labeled "&bThe Wizard"
+            add button "pick" labeled "Pick"
+            add exit button "done" labeled "Done"
+        show dialog "class" to player
+
+on dialog click "class":
+    if the clicked button is "pick":
+        set {_class} to dialog input "class"
+        send "&7You picked: &f%{_class}%" to event-player

@@ -1,0 +1,17 @@
+# A yes/no confirmation before a destructive action. Run /cleartrash.
+
+command /cleartrash:
+    trigger:
+        create dialog "confirm-clear":
+            set title to "&cClear your inventory?"
+            add body "This cannot be undone."
+            add button "yes" labeled "&cYes, clear it"
+            add button "no" labeled "Keep my items"
+        show dialog "confirm-clear" to player
+
+on dialog click "confirm-clear":
+    if the clicked button is "yes":
+        clear the inventory of event-player
+        send "&cInventory cleared." to event-player
+    else:
+        send "&7Cancelled." to event-player
