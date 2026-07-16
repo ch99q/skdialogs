@@ -37,6 +37,8 @@ jobs:
     needs: build
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
+    env:
+      MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
@@ -55,3 +57,7 @@ jobs:
         with:
           files: build/libs/*.jar
           generate_release_notes: true
+
+      - name: Publish to Modrinth
+        if: env.MODRINTH_TOKEN != ''
+        run: ./gradlew modrinth --no-daemon

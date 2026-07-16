@@ -334,7 +334,8 @@ compiles.
 
 CI builds every push and pull request, and a weekly `paper-api` job compiles against the latest
 Paper build, so a breaking change to the experimental dialog API shows up as a failed run instead
-of a surprise on a server. Pushing a `vX.Y.Z` tag attaches the jar to a GitHub release.
+of a surprise on a server. Pushing a `vX.Y.Z` tag attaches the jar to a GitHub release and
+publishes it to Modrinth.
 
 ## Contributing
 

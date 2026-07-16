@@ -1,5 +1,6 @@
 plugins {
     java
+    id("com.modrinth.minotaur") version "2.9.0"
 }
 
 group = property("group") as String
@@ -36,4 +37,19 @@ tasks.processResources {
     filesMatching("plugin.yml") {
         expand(tokens)
     }
+}
+
+// Uploads the built jar as a Modrinth version; CI runs this task on tagged releases.
+modrinth {
+    token.set(System.getenv("MODRINTH_TOKEN"))
+    projectId.set("skdialogs")
+    versionNumber.set(version as String)
+    versionType.set("release")
+    uploadFile.set(tasks.jar)
+    gameVersions.add(paperVersion.substringBefore(".build"))
+    loaders.add("paper")
+    dependencies {
+        required.project("skript")
+    }
+    changelog.set("https://github.com/ch99q/skdialogs/releases/tag/v$version")
 }
