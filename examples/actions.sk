@@ -1,5 +1,5 @@
-# Action buttons, a command-template form, labelled dropdown options, and keep-open
-# behaviour. Run /menu, /rename, and /class.
+# Action buttons, a command-template form, labelled dropdown options, keep-open
+# behaviour, and toggle values. Run /menu, /rename, /class, and /gift.
 
 # A menu whose buttons act on their own, with no event handler at all.
 command /menu:
@@ -42,3 +42,14 @@ on dialog click "class":
     if the clicked button is "pick":
         set {_class} to dialog input "class"
         send "&7You picked: &f%{_class}%" to event-player
+
+# Toggle values: $(stack) becomes "64" or "1" in the command, instead of true or false.
+# The command runs as the player, so /give here needs permission to run it.
+command /gift:
+    trigger:
+        create dialog "gift":
+            set title to "&aGift yourself dirt"
+            add toggle input "stack" labeled "Whole stack?" with values "64" and "1"
+            add button labeled "&2Give" that runs "/give @s dirt $(stack)"
+            add exit button "cancel" labeled "Cancel"
+        show dialog "gift" to player

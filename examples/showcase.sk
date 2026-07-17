@@ -1,22 +1,30 @@
 # Debugging showcase: one dialog exercising every component this addon exposes.
 # Run /showcase, fiddle with everything, press a button, and the values print to chat.
+# /links shows the same link list the pause menu's "Server Links" button opens.
+
+on load:
+    clear the server links
+    add server link labeled "<translate:item.minecraft.filled_map> &8(Dynmap)" to "https://map.example.com"
+    add website server link to "https://github.com/ch99q/skdialogs"
 
 command /showcase:
     trigger:
         create dialog "showcase":
             set title to "&6Component showcase"
+            set external title to "Showcase"
             set columns to 2
             set close on escape to true
             add body "&7Every input and body type this addon supports."
-            add body "Second plain-message line."
-            add item body diamond sword
+            add body "A narrow second line." with width 120
+            add item body diamond sword with description "A trusty blade" sized 24 by 24
+            add item body 12 bamboo without decorations
             add text input "text" labeled "Text" with default "hello" with max length 32
-            add text input "multi" labeled "Multiline" with default "line 1" multiline
+            add text input "multi" labeled "Multiline" with default "line 1" multiline up to 3 lines
             add toggle input "toggle" labeled "Toggle" with default true
-            add slider input "slider" labeled "Slider (0-100, step 5)" from 0 to 100 with step 5 with default 25
+            add slider input "slider" labeled "Blocks" from 0 to 100 with step 5 with default 25 with format "{value} blocks"
             add dropdown input "dropdown" labeled "Dropdown" with options "red", "green" and "blue" with default "green"
             add button "a" labeled "&aButton A" with tooltip "the first button"
-            add button "b" labeled "&bButton B" with tooltip "the second button"
+            add button "b" labeled "&bButton B" with width 100
             add button "c" labeled "Button C"
         show dialog "showcase" to player
 
@@ -34,3 +42,11 @@ on dialog click "showcase":
     send "&7toggle: &f%{_toggle}%" to event-player
     send "&7slider: &f%{_slider}%" to event-player
     send "&7dropdown: &f%{_dropdown}%" to event-player
+
+command /links:
+    trigger:
+        create dialog "links":
+            set title to "&9Server links"
+            add server links to the list
+            add exit button "back" labeled "Back"
+        show dialog "links" to player

@@ -6,7 +6,7 @@ command /cleartrash:
             set title to "&cClear your inventory?"
             add body "This cannot be undone."
             add button "yes" labeled "&cYes, clear it"
-            add button "no" labeled "Keep my items"
+            add exit button "no" labeled "Keep my items"
         show dialog "confirm-clear" to player
 
 on dialog click "confirm-clear":

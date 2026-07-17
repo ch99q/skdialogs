@@ -13,5 +13,5 @@ Start with `confirm.sk` if dialogs are new to you; it is the smallest complete f
 | [settings.sk](settings.sk) | `/settings` | Every input type in one dialog, saved to per-player variables. |
 | [wizard.sk](wizard.sk) | `/wizard` | A multi-page flow: each page is a dialog, and each click opens the next. |
 | [list.sk](list.sk) | `/hub` | A dialog list: a menu whose entries open other dialogs, with Back buttons that loop. |
-| [actions.sk](actions.sk) | `/menu`, `/rename`, `/class` | Action buttons, command templates with `$(input)`, labelled dropdown options, and keep-open dialogs. |
-| [showcase.sk](showcase.sk) | `/showcase` | Every component at once; press a button and all values print to chat. |
+| [actions.sk](actions.sk) | `/menu`, `/rename`, `/class`, `/gift` | Action buttons, command templates with `$(input)`, labelled dropdown options, keep-open dialogs, and toggle values. |
+| [showcase.sk](showcase.sk) | `/showcase`, `/links` | Every component at once; press a button and all values print to chat. |

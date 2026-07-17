@@ -54,7 +54,8 @@ Every dialog follows the same three steps.
    button's id and `dialog input "key"` is what the player entered.
 
 Buttons can also carry an action (run a command, open a link) and then skip step 3 entirely. All
-strings accept `&` colour codes.
+strings go through Skript's chat format, the same as `send`: `&` colour codes, hex colours, and
+tags like `<translate:item.minecraft.filled_map>`, which each client renders in its own language.
 
 ## Ask for input
 
@@ -200,6 +201,7 @@ The id is how you refer to the dialog everywhere else: `show dialog`, `on dialog
 
 ```applescript
 set [the] title [of [the] dialog] to %string%
+set [the] external title [of [the] dialog] to %string%
 set [the] columns [of [the] dialog] to %number%
 set (closing|close) on escape [of [the] dialog] to %boolean%
 set [the] after[ ]click [behaviour|behavior] [of [the] dialog] to (close|keep open|wait [for response])
@@ -208,6 +210,7 @@ set [the] after[ ]click [behaviour|behavior] [of [the] dialog] to (close|keep op
 | Property | Default | Meaning |
 |---|---|---|
 | `title` | the dialog's id | Text shown at the top of the window. |
+| `external title` | the title | Label shown where a client lists the dialog outside itself. |
 | `columns` | 2 | How many columns of buttons a multi-action or list dialog lays out. |
 | `close on escape` | true | Whether the escape key closes the dialog. |
 | `after click` | close | What the dialog does once a button is pressed. |
@@ -216,14 +219,19 @@ The `after click` choices are `close` (the dialog closes), `keep open` (it stays
 player can press a button several times and each click re-reads the inputs), and `wait for response`
 (it greys out until the server replies).
 
+Vanilla's pause-menu and quick-action buttons come from data pack tags resolved at load, so dialogs
+created at runtime cannot appear there.
+
 ### Body
 
 ```applescript
-add [a] [plain] body %string%
-add [an] item body %itemstack%
+add [a] [plain] body %string% [with width %number%]
+add [an] item body %itemstack% [with description %string%] [without tooltip] [without decorations] [sized %number% by %number%]
 ```
 
-Adds a line of content: a message, or a rendered item.
+Adds a line of content: a message, or a rendered item. An item's description is shown next to it,
+`without tooltip` hides its hover tooltip, `without decorations` hides its count and durability
+bar, and `sized` sets the box it renders in (width by height, 16 by 16 unless set).
 
 ### Inputs
 
@@ -231,10 +239,10 @@ Every input takes a key (its name in the click event) and an optional `labeled` 
 defaults to the key.
 
 ```applescript
-add text input %string% [labeled %string%] [with default %string%] [with max[imum] length %number%] [multiline]
-add (boolean|toggle) input %string% [labeled %string%] [with default %boolean%]
-add (slider|number) input %string% [labeled %string%] (from|between) %number% (to|and) %number% [(by|with step) %number%] [with default %number%]
-add (dropdown|choice) input %string% [labeled %string%] with options %strings% [with default %string%]
+add text input %string% [labeled %string%] [with default %string%] [with max[imum] length %number%] [with width %number%] [multiline [up to %number% lines]]
+add (boolean|toggle) input %string% [labeled %string%] [with default %boolean%] [with values %string% and %string%]
+add (slider|number) input %string% [labeled %string%] (from|between) %number% (to|and) %number% [(by|with step) %number%] [with default %number%] [with format %string%] [with width %number%]
+add (dropdown|choice) input %string% [labeled %string%] with options %strings% [with default %string%] [with width %number%]
 ```
 
 | Input | Player sees | `dialog input "key"` returns |
@@ -243,6 +251,11 @@ add (dropdown|choice) input %string% [labeled %string%] with options %strings% [
 | `toggle` | an on/off switch | true or false |
 | `slider` | a slider over the given range | a number |
 | `dropdown` | a list of choices | the chosen option's id |
+
+A slider without a default starts at the low end of its range. `with format` shapes the slider's
+label, with `{label}` and `{value}` marking the substitutions, e.g. `with format "{value} blocks"`.
+A toggle's `with values` sets what a `$(key)` command placeholder becomes for each state, e.g.
+`with values "64" and "1"` instead of true and false.
 
 A dropdown can also list its choices as a section, so each choice shows a label different from the
 id you read back:
@@ -255,8 +268,8 @@ add (dropdown|choice) input %string% [labeled %string%]:
 ### Buttons
 
 ```applescript
-add [a] button [%string%] [labeled %string%] [with tooltip %string%] [that (runs|opens|copies|suggests|shows) %string%]
-add [an] exit button [%string%] [labeled %string%] [with tooltip %string%]
+add [a] button [%string%] [labeled %string%] [with tooltip %string%] [with width %number%] [that (runs|opens|copies|suggests|shows) %string%]
+add [an] exit button [%string%] [labeled %string%] [with tooltip %string%] [with width %number%]
 ```
 
 The label defaults to the id. What a button does depends on its action clause:
@@ -273,18 +286,46 @@ The label defaults to the id. What a button does depends on its action clause:
 The exit button is the single back/cancel button a multi-action or list dialog shows below the
 others; a dialog can have at most one.
 
-How the dialog is laid out follows from its buttons. No buttons is a plain notice; exactly one
-button and no exit button is a notice with that button; anything more is a multi-action dialog in
-the configured columns.
+`that runs` runs the command as the player, with the player's permissions, and the client asks the
+player to confirm a plain command first. Work that needs more permission than the player has
+belongs in `on dialog click` instead.
+
+How the dialog is laid out follows from its buttons. No buttons is a plain notice; one button is a
+notice with that button; one button plus an exit button is a yes/no confirmation; anything more is
+a multi-action dialog in the configured columns. Setting `columns` turns a confirmation back into
+a multi-action.
 
 ### Dialog lists
 
 ```applescript
 add dialog %string% to [the] list
+add [the] server links to [the] list
 ```
 
 Adds another dialog, by id, as an entry in this dialog's menu. A dialog with any list entries is
-shown as a list: each entry is a button that opens that dialog.
+shown as a list: each entry is a button that opens that dialog. `server links` instead presents
+the link list the server advertises.
+
+### Server links
+
+```applescript
+add [a] server link labeled %string% to [url] %string%
+add [a|the] (bug report|community guidelines|support|status|feedback|community|website|forums|news|announcements) server link to [url] %string%
+(clear|delete) [all] [the] server links
+```
+
+Manages the server's link list, shown under "Server Links" in the pause menu and in a
+`server links` dialog. Links are server-wide, so `on load` is the natural place to set them. A
+typed link is labelled by each client in its own language; a labeled link shows your text, and a
+`<translate:...>` tag makes that per-language too. Clearing first lets a reloading script rebuild
+the list without stacking duplicates.
+
+```applescript
+on load:
+    clear the server links
+    add server link labeled "<translate:item.minecraft.filled_map>" to "https://map.example.com"
+    add website server link to "https://example.com"
+```
 
 ### Show and close
 
