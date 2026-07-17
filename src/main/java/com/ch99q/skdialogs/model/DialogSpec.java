@@ -14,6 +14,8 @@ import java.util.List;
 public final class DialogSpec {
     public final String id;
     public Component title;
+    /** The label of the dialog's pause-menu button, when a client surfaces it there. */
+    public Component externalTitle;
     public Integer columns;
     public Boolean closeOnEscape;
     /** Paper {@code DialogAfterAction} constant name (CLOSE, NONE, WAIT_FOR_RESPONSE), or null for the default. */
@@ -24,6 +26,8 @@ public final class DialogSpec {
     public final List<Button> buttons = new ArrayList<>();
     /** Ids of other dialogs to present as a menu; when non-empty this dialog is a list. */
     public final List<String> listDialogs = new ArrayList<>();
+    /** Present the server's link list instead of buttons or list entries. */
+    public boolean serverLinks;
     /** The single back/cancel button, shown for multi-action and list dialogs. */
     public Button exit;
 
@@ -38,6 +42,11 @@ public final class DialogSpec {
         public final Kind kind;
         public Component message;
         public ItemStack item;
+        public Component description;
+        public Boolean showTooltip;
+        public Boolean showDecorations;
+        public Integer width;
+        public Integer height;
 
         private Body(Kind kind) { this.kind = kind; }
 
@@ -61,14 +70,21 @@ public final class DialogSpec {
         public final String key;
         public Component label;
 
+        public Integer width;
         public String textDefault;
         public Integer maxLength;
         public Boolean multiline;
+        public Integer maxLines;
         public Boolean booleanDefault;
+        /** What {@code $(key)} becomes in a command template for each toggle state; null for true/false. */
+        public String onTrue;
+        public String onFalse;
         public Float min;
         public Float max;
         public Float step;
         public Float sliderDefault;
+        /** Slider label format; {@code {label}} and {@code {value}} mark the substitutions. */
+        public String format;
         public final List<Option> options = new ArrayList<>();
 
         public Input(Kind kind, String key) {
@@ -97,6 +113,7 @@ public final class DialogSpec {
         public final String id;
         public Component label;
         public Component tooltip;
+        public Integer width;
         public Action action = Action.EVENT;
         /** The command, url, or text the non-event actions carry. */
         public String actionValue;

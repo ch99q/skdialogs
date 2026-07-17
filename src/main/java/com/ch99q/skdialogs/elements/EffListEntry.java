@@ -28,10 +28,15 @@ import org.jetbrains.annotations.Nullable;
 public class EffListEntry extends DialogEffect {
 
     static {
-        Skript.registerEffect(EffListEntry.class, "add dialog %string% to [the] list");
+        Skript.registerEffect(EffListEntry.class,
+                "add dialog %string% to [the] list",
+                "add [the] server links to [the] list");
     }
 
-    private Expression<String> id;
+    private static final int SERVER_LINKS = 1;
+
+    private boolean serverLinks;
+    private @Nullable Expression<String> id;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -39,12 +44,19 @@ public class EffListEntry extends DialogEffect {
         if (!insideDialogSection()) {
             return false;
         }
-        id = (Expression<String>) expressions[0];
+        serverLinks = matchedPattern == SERVER_LINKS;
+        if (!serverLinks) {
+            id = (Expression<String>) expressions[0];
+        }
         return true;
     }
 
     @Override
     protected void apply(DialogSpec spec, Event event) {
+        if (serverLinks) {
+            spec.serverLinks = true;
+            return;
+        }
         String referenced = id.getSingle(event);
         if (referenced != null) {
             spec.listDialogs.add(referenced);

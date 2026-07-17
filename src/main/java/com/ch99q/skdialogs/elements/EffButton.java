@@ -38,7 +38,7 @@ public class EffButton extends DialogEffect {
     private static final int RUN = 1, OPEN = 2, COPY = 3, SUGGEST = 4, SHOW = 5;
 
     static {
-        String tail = "[%-string%] [labeled %-string%] [with tooltip %-string%]"
+        String tail = "[%-string%] [labeled %-string%] [with tooltip %-string%] [with width %-number%]"
                 + " [that (1¦runs [command]|2¦opens [[the] url]|3¦copies|4¦suggests [command]|5¦shows [dialog]) %-string%]";
         Skript.registerEffect(EffButton.class,
                 "add [a] button " + tail,
@@ -50,6 +50,7 @@ public class EffButton extends DialogEffect {
     private @Nullable Expression<String> id;
     private @Nullable Expression<String> label;
     private @Nullable Expression<String> tooltip;
+    private @Nullable Expression<Number> width;
     private @Nullable Expression<String> actionValue;
 
     @Override
@@ -63,7 +64,8 @@ public class EffButton extends DialogEffect {
         id = (Expression<String>) expressions[0];
         label = (Expression<String>) expressions[1];
         tooltip = (Expression<String>) expressions[2];
-        actionValue = (Expression<String>) expressions[3];
+        width = (Expression<Number>) expressions[3];
+        actionValue = (Expression<String>) expressions[4];
 
         if (actionKind == 0 && id == null) {
             Skript.error("An event button needs an id to match in 'on dialog click'. "
@@ -87,6 +89,10 @@ public class EffButton extends DialogEffect {
         String tooltipText = tooltip != null ? tooltip.getSingle(event) : null;
         if (tooltipText != null) {
             button.tooltip = Text.component(tooltipText);
+        }
+        Number widthValue = width != null ? width.getSingle(event) : null;
+        if (widthValue != null) {
+            button.width = widthValue.intValue();
         }
         if (actionKind != 0) {
             button.action = switch (actionKind) {

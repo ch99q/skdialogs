@@ -38,10 +38,14 @@ public class EffInput extends DialogEffect {
 
     static {
         Skript.registerEffect(EffInput.class,
-                "add text input %string% [labeled %-string%] [with default %-string%] [with max[imum] length %-number%] [(1¦multiline)]",
-                "add (boolean|toggle) input %string% [labeled %-string%] [with default %-boolean%]",
-                "add (slider|number) input %string% [labeled %-string%] (from|between) %number% (to|and) %number% [(by|with step) %-number%] [with default %-number%]",
-                "add (dropdown|choice) input %string% [labeled %-string%] with options %strings% [with default %-string%]");
+                "add text input %string% [labeled %-string%] [with default %-string%] [with max[imum] length %-number%]"
+                        + " [with width %-number%] [(1¦multiline [up to %-number% lines])]",
+                "add (boolean|toggle) input %string% [labeled %-string%] [with default %-boolean%]"
+                        + " [with values %-string% and %-string%]",
+                "add (slider|number) input %string% [labeled %-string%] (from|between) %number% (to|and) %number%"
+                        + " [(by|with step) %-number%] [with default %-number%] [with format %-string%] [with width %-number%]",
+                "add (dropdown|choice) input %string% [labeled %-string%] with options %strings% [with default %-string%]"
+                        + " [with width %-number%]");
     }
 
     private int kind;
@@ -77,9 +81,15 @@ public class EffInput extends DialogEffect {
                 if (max != null) {
                     input.maxLength = max.intValue();
                 }
+                input.width = intOf(4, event);
                 input.multiline = multiline;
+                input.maxLines = intOf(5, event);
             }
-            case BOOLEAN -> input.booleanDefault = bool(2, event);
+            case BOOLEAN -> {
+                input.booleanDefault = bool(2, event);
+                input.onTrue = string(3, event);
+                input.onFalse = string(4, event);
+            }
             case SLIDER -> {
                 Number min = number(2, event);
                 Number max = number(3, event);
@@ -89,6 +99,8 @@ public class EffInput extends DialogEffect {
                 input.max = max != null ? max.floatValue() : 1f;
                 input.step = step != null ? step.floatValue() : null;
                 input.sliderDefault = def != null ? def.floatValue() : null;
+                input.format = string(6, event);
+                input.width = intOf(7, event);
             }
             case DROPDOWN -> {
                 String selected = string(3, event);
@@ -97,6 +109,7 @@ public class EffInput extends DialogEffect {
                     option.selected = id.equals(selected);
                     input.options.add(option);
                 }
+                input.width = intOf(4, event);
             }
             default -> { }
         }
@@ -120,6 +133,11 @@ public class EffInput extends DialogEffect {
     private @Nullable Number number(int i, Event event) {
         Object v = single(i, event);
         return v == null ? null : (Number) v;
+    }
+
+    private @Nullable Integer intOf(int i, Event event) {
+        Number n = number(i, event);
+        return n == null ? null : n.intValue();
     }
 
     private @Nullable Boolean bool(int i, Event event) {

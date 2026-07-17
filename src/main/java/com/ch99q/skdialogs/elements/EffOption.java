@@ -29,14 +29,15 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.0")
 public class EffOption extends DialogEffect {
 
-    private static final int TITLE = 0, COLUMNS = 1, ESCAPE = 2, AFTER = 3;
+    private static final int TITLE = 0, COLUMNS = 1, ESCAPE = 2, AFTER = 3, EXTERNAL = 4;
 
     static {
         Skript.registerEffect(EffOption.class,
                 "set [the] title [of [the] dialog] to %string%",
                 "set [the] columns [of [the] dialog] to %number%",
                 "set (closing|close) on escape [of [the] dialog] to %boolean%",
-                "set [the] after[ ]click [behaviour|behavior] [of [the] dialog] to (1¦close|2¦keep open|3¦wait[ for response])");
+                "set [the] after[ ]click [behaviour|behavior] [of [the] dialog] to (1¦close|2¦keep open|3¦wait[ for response])",
+                "set [the] external title [of [the] dialog] to %string%");
     }
 
     private int property;
@@ -75,6 +76,7 @@ public class EffOption extends DialogEffect {
             case TITLE -> spec.title = Text.component((String) raw);
             case COLUMNS -> spec.columns = ((Number) raw).intValue();
             case ESCAPE -> spec.closeOnEscape = (Boolean) raw;
+            case EXTERNAL -> spec.externalTitle = Text.component((String) raw);
             default -> { }
         }
     }
