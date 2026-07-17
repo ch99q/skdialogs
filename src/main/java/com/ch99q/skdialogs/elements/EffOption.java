@@ -15,18 +15,20 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Dialog Property")
 @Description({
-        "Sets a property of the dialog being created: the title, the number of button columns, " +
+        "Sets a property of the dialog being created: the title, the external title (the label " +
+        "shown where a client lists the dialog outside itself), the number of button columns, " +
         "whether escape closes it, or what the dialog does after a button is clicked.",
         "'keep open' leaves the dialog on screen so a player can press a button several times; " +
         "'wait for response' greys it out until the server replies."
 })
 @Examples({
         "set title to \"Settings\"",
+        "set external title to \"Menu\"",
         "set columns to 2",
         "set close on escape to true",
         "set after click to keep open"
 })
-@Since("1.0.0")
+@Since("1.0.0, 1.1.0 (external title)")
 public class EffOption extends DialogEffect {
 
     private static final int TITLE = 0, COLUMNS = 1, ESCAPE = 2, AFTER = 3, EXTERNAL = 4;

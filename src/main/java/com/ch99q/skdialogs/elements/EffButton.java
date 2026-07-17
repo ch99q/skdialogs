@@ -29,9 +29,10 @@ import org.jetbrains.annotations.Nullable;
         "add button labeled \"Rename\" that runs \"/nick $(name)\"",
         "add button labeled \"Wiki\" that opens \"https://docs.papermc.io\"",
         "add button labeled \"Back\" that shows \"hub\"",
+        "add button \"wide\" labeled \"Wide\" with width 250",
         "add exit button \"back\" labeled \"Back\""
 })
-@Since("1.0.0")
+@Since("1.0.0, 1.1.0 (width)")
 public class EffButton extends DialogEffect {
 
     private static final int EXIT_PATTERN = 1;
