@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
         "add item body player's tool",
         "add item body 12 bamboo with description \"A bunch of bamboo\" without decorations sized 24 by 24"
 })
-@Since("1.0.0")
+@Since("1.0.0, 1.1.0 (widths, item options)")
 public class EffBody extends DialogEffect {
 
     private static final int MESSAGE = 0, ITEM = 1;
@@ -63,7 +63,7 @@ public class EffBody extends DialogEffect {
         }
         if (kind == ITEM) {
             DialogSpec.Body body = DialogSpec.Body.item((ItemStack) raw);
-            String description = string(1, event);
+            String description = string(parts, 1, event);
             if (description != null) {
                 body.description = Text.component(description);
             }
@@ -73,29 +73,14 @@ public class EffBody extends DialogEffect {
             if ((marks & NO_DECORATIONS) != 0) {
                 body.showDecorations = false;
             }
-            body.width = intOf(2, event);
-            body.height = intOf(3, event);
+            body.width = intOf(parts, 2, event);
+            body.height = intOf(parts, 3, event);
             spec.bodies.add(body);
         } else {
             DialogSpec.Body body = DialogSpec.Body.message(Text.component((String) raw));
-            body.width = intOf(1, event);
+            body.width = intOf(parts, 1, event);
             spec.bodies.add(body);
         }
-    }
-
-    private @Nullable String string(int i, Event event) {
-        if (parts.length <= i || parts[i] == null) {
-            return null;
-        }
-        return (String) parts[i].getSingle(event);
-    }
-
-    private @Nullable Integer intOf(int i, Event event) {
-        if (parts.length <= i || parts[i] == null) {
-            return null;
-        }
-        Number n = (Number) parts[i].getSingle(event);
-        return n == null ? null : n.intValue();
     }
 
     @Override
