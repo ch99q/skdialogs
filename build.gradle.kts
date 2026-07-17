@@ -48,8 +48,18 @@ modrinth {
     dependencies {
         required.project("skript")
     }
-    changelog.set("https://github.com/ch99q/skdialogs/releases/tag/v$version")
+    changelog.set(provider { changelogSection(version as String) })
     // The README, with relative links made absolute so they work off GitHub.
     syncBodyFrom.set(rootProject.file("README.md").readText()
             .replace(Regex("]\\((?!https?://|#)"), "](https://github.com/ch99q/skdialogs/blob/main/"))
+}
+
+/** This release's section of CHANGELOG.md, the same notes CI puts on the GitHub release. */
+fun changelogSection(version: String): String {
+    val lines = rootProject.file("CHANGELOG.md").readLines()
+    val start = lines.indexOfFirst { it.startsWith("## [$version]") }
+    require(start >= 0) { "CHANGELOG.md has no section for $version" }
+    val rest = lines.drop(start + 1)
+    val length = rest.indexOfFirst { it.startsWith("## [") }.let { if (it < 0) rest.size else it }
+    return rest.take(length).joinToString("\n").trim()
 }

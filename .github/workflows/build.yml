@@ -52,11 +52,17 @@ jobs:
       - name: Build
         run: ./gradlew build --no-daemon
 
+      - name: Extract release notes
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v ver="$version" '/^## \[/{p = index($0, "[" ver "]") > 0; next} p' CHANGELOG.md > release-notes.md
+          test -s release-notes.md
+
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
           files: build/libs/*.jar
-          generate_release_notes: true
+          body_path: release-notes.md
 
       - name: Publish to Modrinth
         if: env.MODRINTH_TOKEN != ''
