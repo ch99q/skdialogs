@@ -31,8 +31,12 @@ usually shows up there first, as a failed run.
 
 ## Releasing
 
-Pushing a `vX.Y.Z` tag builds the jar, attaches it to a GitHub release, and publishes it to
-Modrinth. The Modrinth step needs one-time setup and is skipped until it is done:
+Retitle the Unreleased section of `CHANGELOG.md` to the new version and date, bump `version` in
+`gradle.properties`, then push a `vX.Y.Z` tag. That builds the jar, attaches it to a GitHub
+release, and publishes it to Modrinth, with that changelog section as the notes on both. Tagging a
+version without a changelog section fails the release.
+
+The Modrinth step needs one-time setup and is skipped until it is done:
 
 1. Create a Modrinth project with the slug `skdialogs`.
 2. Create a Modrinth personal access token allowed to create versions.
@@ -41,6 +45,7 @@ Modrinth. The Modrinth step needs one-time setup and is skipped until it is done
 ## Pull requests
 
 - Keep a pull request small and focused on one change.
+- A user-visible change adds a line to `CHANGELOG.md` under Unreleased.
 - Follow [Conventional Commits](https://www.conventionalcommits.org/) for commit messages
   (`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`).
 - New syntax needs three things: doc annotations on the element (`@Name`, `@Description`,
